@@ -78,7 +78,7 @@ Return mode. Default value: 1. (1 represents single return mode; 2 represents du
 Default value: true (true: yes; false: no). Whether to open the GPS time synchronization (pre-configuration required). 
 
 
-### lslidar_c16_driver
+### lslidar_driver
 
 `frame_id` (`string`, `default: laser_link`)
 
@@ -97,7 +97,6 @@ Default value: 224.1.1.2. Multicast IP. Enabled when the value of add_multicast 
 Lidar's rotate speed. Default value: 600R/M. Modifiable, please keep it consistent with lidar frequency: 5Hz 300R/M，10Hz 600R/M，20Hz 1200R/M
 
 
-### lslidar_c16_decoder
 
 `min_range` (`double`, `default: 0.15`)
 
