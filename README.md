@@ -5,13 +5,12 @@ ROS Installation
 
 Before starting this turorial, please complete installation . This tutorial assumes that Ubuntu is being used.
 
-# lslidar_c16_V3.0
-
+# lslidar_c32_V3.0
 [Customer service entrance](https://1893520.s5.udesk.cn/im_client/?web_plugin_id=502)
 
 ## Description
 
-The `lslidar_c16_V3.0` package is a linux ROS driver for lslidar C16 V3.0.
+The `lslidar_c32_V3.0` package is a linux ROS driver for lslidar C32_V3.0.
 
 Supported Operating
 ----
@@ -32,7 +31,7 @@ This is a Catkin package. Make sure the package is on `ROS_PACKAGE_PATH`  after 
 ```
 cd your_work_space
 cd src
-git clone -b C16_v3.0 https://github.com/Lslidar/lslidar_ros.git
+git clone -b C32_v3.0 https://github.com/Lslidar/lslidar_ros.git
 catkin_make
 source devel/setup.bash
 ```
@@ -42,7 +41,7 @@ source devel/setup.bash
 1. Launch the provided pointcloud generation launch file.
 
 ```
-roslaunch lslidar_driver lslidar_c16.launch
+roslaunch lslidar_driver lslidar_c32.launch
 ```
 
 1. Launch rviz, with the "laser_link" frame as the fixed frame.
@@ -57,7 +56,7 @@ rosrun rviz rviz -f laser_link
 
 ## **Parameters**
 
-``device_ip` (`string`, `default: 192.168.1.200`)
+`device_ip` (`string`, `default: 192.168.1.200`)
 
 By default, the IP address of the device is 192.168.1.200.
 
@@ -73,16 +72,21 @@ Default value:2369.Device package port. Modifiable, please keep it consistent wi
 
 Return mode. Default value: 1. (1 represents single return mode; 2 represents dual return mode)
 
+`degree_mode` (`int`, `default: 2`)
+
+Lidar vertical angle resolution mode. Default value: 2 (1 represents 1.33°; 2 represnets 2°). The resolution is set by the factory. To modify it, please refer to the user manual.
+
 `time_synchronization` (`bool`, `default: true`)
 
 Default value: true (true: yes; false: no). Whether to open the GPS time synchronization (pre-configuration required). 
 
 
-### lslidar_c16_driver
+
+### lslidar_driver
 
 `frame_id` (`string`, `default: laser_link`)
 
-Default value: laser_link. Lidar's coordinates name.
+Default value: laser_link. Point cloud coordinates name.
 
 `add_multicast`(`bool`, `default: false`)
 
@@ -97,7 +101,7 @@ Default value: 224.1.1.2. Multicast IP. Enabled when the value of add_multicast 
 Lidar's rotate speed. Default value: 600R/M. Modifiable, please keep it consistent with lidar frequency: 5Hz 300R/M，10Hz 600R/M，20Hz 1200R/M
 
 
-### lslidar_c16_decoder
+
 
 `min_range` (`double`, `default: 0.15`)
 
@@ -107,9 +111,17 @@ The minimum scanning range. Point cloud data inside this range would be removed.
 
 The maximum scanning range. Point cloud data outside this range would be removed. Default value: 150 meters.
 
-`frequency` (`int`, `default: 10`)
+`scan_start_angle` (`double`, `default: 0.0`)
 
-Lidar scanning frequency. Default value: 10Hz.
+Start angle of lidar scanning. Default value: 0.0, unit: 0.01°.
+
+`scan_end_angle` (`double`, `default: 36000.0`)
+
+End angle of lidar scanning. Default value: 36000.0, unit: 0.01°.
+
+`distance_unit` (`double` `default: 0.25`)
+
+Lidar's distance resolution. Default value: 0.25 meters. Do not modify.
 
 `config_vert` (`bool`, `default: true`)
 
@@ -119,37 +131,21 @@ Whether to open lidar vertical angle configuration calibration. Default value: t
 
 Whether to open lidar vertical angle print. Default value: false (ture: yes; false: no)
 
-`degree_mode` (`int`, `default: 2`)
+`scan_frame_id` (`string`, `default: laser_link`)
 
-Lidar vertical angle resolution mode. Default value: 2 (1 represents 1.33°; 2 represnets 2°). The resolution is set by the factory. To modify it, please refer to the user manual.
+Topic name of LaserScan. Modifiable.
 
-`distance_unit` (`double`, `default: 0.25`)
+`scan_num` (`int`, `default: 15`)
 
-Lidar's distance resolution. Default value: 0.25 meters. Do not modify.
+Laserscan topic, chosen channel, line number. Default value: 15. Modifiable.
 
-`scan_start_angle` (`double`, `default: 0.0`)
+`publish_scan` (`bool`, `default: true`)
 
-Start angle of lidar scanning. Default value: 0.0, unit: 0.01°.
-
-`scan_end_angle` (`double`, `default: 36000.0`)
-
-End angle of lidar scanning. Default value: 36000.0, unit: 0.01°.
-
-`scan_num` (`int`, `default: 8`)
-
-Laserscan topic, chosen channel, line number. Default value: 8. Modifiable.
-
-`publish_scan` (`bool`, `default: false`)
-
-Publish publish_scan topic. Default value: false (true: yes; false: no)
-
-`echo_second` (`bool`, `default: false`)
-
-Whether to publish the second return only under dual return mode. Default value: false (true: yes; false: no)
+Publish publish_scan topic. Default value: true (true: yes; false: no)
 
 `pointcloud_topic` (`string`, `default: lslidar_point_cloud`)
 
-Topic name of pointcloud 2. Default value: lslidar_point_cloud. Modifiable.
+Topic name of pointcloud2. Modifiable.
 
 `coordinate_opt` (`bool`, `default: true`)
 
@@ -161,18 +157,18 @@ Point cloud coordinates selection. By default, Lidar's 0° angle is coorespoding
 
 This is published the lslidar_point_cloud topic.
 
-`lslidar_packets` (`lslidar_c16_msgs/Lslidarc16Packet`)
+`lslidar_packets` (`lslidar_c32_msgs/Lslidarc32Packet`)
 
 Each message corresponds to a lslidar packet sent by the device through the Ethernet.
 
-`scan` (`lslidar_c16_msgs/LaserScan`)
+`scan` (`lslidar_c32_msgs/LaserScan`)
 
 This is only published when the `publish_scan`is set to `true` in the launch file.
 
 **Node**
 
 ```
-roslaunch lslidar_driver lslidar_c16.launch
+roslaunch lslidar_driver lslidar_c32.launch
 ```
 
 Note that this launch file launches both the driver and the decoder, which is the only launch file needed to be used.
@@ -183,10 +179,11 @@ Note that this launch file launches both the driver and the decoder, which is th
 ## Technical support
 
 Any more question please commit an issue.
-
 you can contact support@lslidar.com
 or Enter our live chat window
 [Customer service entrance](https://1893520.s5.udesk.cn/im_client/?web_plugin_id=502)
+
+
 
 
 
